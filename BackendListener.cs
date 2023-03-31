@@ -1,6 +1,9 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using SQLite;
+using System.Data.SQLite;
+
 
 // this is a simple async backend server
 // it will accept async connections and write each received packet to the console and to a new file
@@ -37,6 +40,10 @@ public class BackendListener
 
     public void Start()
     {
+        Database database = new Database();
+        SQLiteConnection connection;
+        connection = database.CreateConnection();
+        database.CreateTable(connection);
         listener = new TcpListener(IPAddress.Any, port);
         listener.Start();
         listener.BeginAcceptTcpClient(new AsyncCallback(AcceptTcpClientCallback), listener);
